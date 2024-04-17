@@ -1,0 +1,41 @@
+[==========] Running 15 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from TestQueue
+[ RUN      ] TestQueue.ClassInit
+[       OK ] TestQueue.ClassInit (0 ms)
+[ RUN      ] TestQueue.InsertForward
+[       OK ] TestQueue.InsertForward (0 ms)
+[ RUN      ] TestQueue.InsertBackward
+[       OK ] TestQueue.InsertBackward (0 ms)
+[ RUN      ] TestQueue.InsertMultipleForward
+[       OK ] TestQueue.InsertMultipleForward (0 ms)
+[ RUN      ] TestQueue.InsertMultipleBackward
+[       OK ] TestQueue.InsertMultipleBackward (0 ms)
+[ RUN      ] TestQueue.InsertMultipleBoth
+[       OK ] TestQueue.InsertMultipleBoth (0 ms)
+[ RUN      ] TestQueue.InsertPopForward
+[       OK ] TestQueue.InsertPopForward (0 ms)
+[ RUN      ] TestQueue.InsertPopBackward
+[       OK ] TestQueue.InsertPopBackward (0 ms)
+[ RUN      ] TestQueue.PopTillEmpty
+[       OK ] TestQueue.PopTillEmpty (0 ms)
+[----------] 9 tests from TestQueue (0 ms total)
+
+[----------] 6 tests from TestNode
+[ RUN      ] TestNode.ClassInit
+[       OK ] TestNode.ClassInit (0 ms)
+[ RUN      ] TestNode.IsConditionals
+[       OK ] TestNode.IsConditionals (0 ms)
+[ RUN      ] TestNode.Forward
+[       OK ] TestNode.Forward (0 ms)
+[ RUN      ] TestNode.Backward
+[       OK ] TestNode.Backward (0 ms)
+[ RUN      ] TestNode.Insque
+[       OK ] TestNode.Insque (0 ms)
+[ RUN      ] TestNode.Remque
+[       OK ] TestNode.Remque (0 ms)
+[----------] 6 tests from TestNode (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 15 tests from 2 test suites ran. (0 ms total)
+[  PASSED  ] 15 tests.

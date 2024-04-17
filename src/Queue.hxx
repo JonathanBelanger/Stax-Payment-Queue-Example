@@ -83,33 +83,76 @@ class Node
         //
         Node& operator=(const Node&) = delete;
 
+        //
+        //! @fn bool isUnlinked()
+        //  @brief Determine if this node is not in a queue
+        //  @return true - This node has not been inserted into a queue.
+        //  @return false - This node has been inserted into a queue.
+        //
         bool
         isUnlinked()
         {
             return ((flink == this) && (blink == this));
         }
 
+        //
+        //! @fn bool isOnly()
+        //  @brief Determine if this node is the only node in a queue
+        //  @return true - This node is the only node in the entire queue.
+        //  @return false - This node is one of more than one nodes in the queue.
+        //
+        bool
+        isOnly(QueueHead<T>* header)
+        {
+            return ((flink == header) && (blink == header));
+        }
+
+        //
+        //! @fn Node* forward()
+        //  @brief Return the next node in the queue (or the header if this node is the last node).
+        //  @return node - A pointer to the next node in the queue.
+        //  @return header - A pointer to the header of the queue.
+        //
         Node<T>*
         forward()
         {
             return flink;
         }
 
+        //
+        //! @fn Node* backward()
+        //  @brief Return the previous node in the queue (or the header if this node is the first node).
+        //  @return node - A pointer to the previous node in the queue.
+        //  @return header - A pointer to the header of the queue.
+        //
         Node<T>*
         backward()
         {
             return blink;
         }
 
-        void
+        //
+        //! @fn void insque(Node* node)
+        //  @brief Insert the supplied node after this node.
+        //  @param node - The address of a node to be inserted into the queue.
+        //  @retval The address of the node inserted.
+        //
+        Node<T>*
         insque(Node<T>* node)
         {
             node->flink = flink;
             node->blink = this;
             flink->blink = node;
             flink = node;
+            return node;
         }
 
+        //
+        //! @fn void remque()
+        //  @brief Remove this node from the queue.
+        //  @param node - The address of a node removed from the queue.
+        //  @retval The address of the node removed.
+        //
         Node<T>*
         remque()
         {
@@ -120,6 +163,11 @@ class Node
             return this;
         }
 
+        //
+        //! @fn T getData()
+        //  @brief Return the data in the node.
+        //  @return The nodeData field found in this node.
+        //
         T
         getData()
         {
@@ -175,18 +223,71 @@ class QueueHead : private Node<T>
         QueueHead&
         operator=(const QueueHead&) = delete;
 
+        //
+        //! @fn QueueHead == node
+        //  @brief Return a boolean if the address of the node is the same as the QueueHead.
+        //  @retval true - The node is the head of the queue.
+        //  @retval false - The node is node the head of the queue.
+        //
         bool
         operator==(const Node<T>* node)
         {
             return static_cast<void*>(this) == static_cast<const void*>(node);
         }
-        bool
 
+        //
+        //! @fn QueueHead != node
+        //  @brief Return a boolean if the address of the node is not the same as the QueueHead.
+        //  @retval False - The node is the head of the queue.
+        //  @retval true - The node is node the head of the queue.
+        //
+        bool
         operator!=(const Node<T>* node)
         {
             return static_cast<void*>(this) != static_cast<const void*>(node);
         }
 
+        //
+        //! @fn bool isEmpty()
+        //  @brief Return an indicator that there are no nodes in the queue (the queue is empty).
+        //  @return true - There are no nodes currently in the queue.
+        //  @return false - There are is at least one node currently in the queue.
+        //
+        bool
+        isEmpty()
+        {
+            return ((flink == this) && (blink == this));
+        }
+
+        //
+        //! @fn Node* forward()
+        //  @brief Return the next node in the queue (or the header if this node is the last node).
+        //  @return node - A pointer to the next node in the queue.
+        //  @return header - A pointer to the header of the queue.
+        //
+        Node<T>*
+        forward()
+        {
+            return flink;
+        }
+
+        //
+        //! @fn Node* backward()
+        //  @brief Return the previous node in the queue (or the header if this node is the first node).
+        //  @return node - A pointer to the previous node in the queue.
+        //  @return header - A pointer to the header of the queue.
+        //
+        Node<T>*
+        backward()
+        {
+            return blink;
+        }
+
+        //
+        //! @fn void push_forward(Node<T>* node)
+        //  @brief Add the supplied node to the front of the queue.
+        //  @param node - The address of the node to be added to the beginning of the queue.
+        //
         void
         push_forward(Node<T>* node)
         {
@@ -206,6 +307,11 @@ class QueueHead : private Node<T>
             }
         }
 
+        //
+        //! @fn void push_backward(Node<T>* node)
+        //  @brief Add the supplied node to the tail of the queue.
+        //  @param node - The address of the node to be added to the end of the queue.
+        //
         void
         push_backward(Node<T>* node)
         {
@@ -225,6 +331,11 @@ class QueueHead : private Node<T>
             }
         }
 
+        //
+        //! @fn Node<T>* pop_forward()
+        //  @brief Remove the first node in the queue.
+        //  @return node - The address of the node removed from the beginning of the queue.
+        //
         Node<T>*
         pop_forward()
         {
@@ -232,8 +343,16 @@ class QueueHead : private Node<T>
             {
                 Node<T>* node = flink;
 
-                flink = node->flink;
-                node->flink->blink = this;
+                if (node->isOnly(this))
+                {
+                    flink = this;
+                    blink = this;
+                }
+                else
+                {
+                    flink = node->flink;
+                    node->flink->blink = this;
+                }
                 node->flink = node;
                 node->blink = node;
                 return node;
@@ -241,6 +360,11 @@ class QueueHead : private Node<T>
             return nullptr;
         }
 
+        //
+        //! @fn Node<T>* pop_backward()
+        //  @brief Remove the last node in the queue.
+        //  @return node - The address of the node removed from the tail of the queue.
+        //
         Node<T>*
         pop_backward()
         {
@@ -248,31 +372,21 @@ class QueueHead : private Node<T>
             {
                 Node<T>* node = blink;
 
-                node->blink->flink = this;
-                blink = node->blink;
+                if (node->isOnly(this))
+                {
+                    flink = this;
+                    blink = this;
+                }
+                else
+                {
+                    node->blink->flink = this;
+                    blink = node->blink;
+                }
                 node->flink = node;
                 node->blink = node;
                 return node;
             }
             return nullptr;
-        }
-
-        bool
-        isEmpty()
-        {
-            return ((flink == this) && (blink == this));
-        }
-
-        Node<T>*
-        forward()
-        {
-            return flink;
-        }
-
-        Node<T>*
-        backward()
-        {
-            return blink;
         }
 
     private:
