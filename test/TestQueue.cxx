@@ -79,7 +79,7 @@ TEST(TestQueue, InsertMultipleForward)
     node = nullptr;
     node = header.forward();
     int ii = 9;
-    while (header.equal(node) != true)
+    while (header != node)
     {
         EXPECT_EQ(ii, node->getData());
         ii--;

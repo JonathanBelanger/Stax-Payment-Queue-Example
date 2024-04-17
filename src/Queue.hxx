@@ -24,30 +24,63 @@
 //
 #pragma once
 
+//
+// Forward declaration of the QueueHead.
+//
 template <class T>
 class QueueHead;
 
+//
+//! @class Node
+//  @brief Node The following template class is used for a single item in a doubly-linked list (queue).
+//  @tparam T Type of the data to be stored in a Node
+//  @note This class is not thread-safe.
+//
 template <class T>
 class Node
 {
     public:
         friend class QueueHead<T>;
-        explicit Node() :
+
+        //
+        //! @fn Node()
+        //  @brief Default Constructor
+        //
+       explicit Node() :
             flink(this),
             blink(this),
             nodeData()
         {}
 
+       //
+       //! @fn Node()
+       //  @brief Constructor with Data
+       //
         explicit Node(T data) :
             flink(this),
             blink(this),
             nodeData(data)
         {}
 
+        //
+        //! @fn ~Node()
+        //  @brief Default Destructor
+        //
         ~Node() = default;
 
+        //
+        //! @fn Node(const Node&)
+        //  @brief Disable the ability to copy this class via another Node.
+        //  @param Node A reference to a Node.
+        //
         Node(const Node&) = delete;
 
+        //
+        //! @fn Node& operator=(Node&)
+        //  @brief Disable the ability to copy this class via the equal operator.
+        //  @param Node A reference to a Node.
+        //  @retval Node A reference to a Node.
+        //
         Node& operator=(const Node&) = delete;
 
         bool
@@ -94,32 +127,64 @@ class Node
         }
 
     private:
-        Node<T>* flink;
-        Node<T>* blink;
-        T nodeData;
+        Node<T>* flink;             //!< Forward link to the next node in the queue (or the header, or itself).
+        Node<T>* blink;             //!< Backward link to the previous node in the queue (or the header, or itself).
+        T nodeData;                 //!< The data of the Node class.
 };
 
+//
+//! @class QueueHead
+//  @brief A header for a doubly-linked list (queue) of Node items.
+//  @tparam T The class of the data to be stored in the queue.
+//  @note This class is not thread-safe.
+//
 template <class T>
 class QueueHead : private Node<T>
 {
     public:
         friend class Node<T>;
+
+        //
+        //! @fn QueueHead()
+        //  @brief Default Constructor
+        //
         explicit QueueHead() :
             flink(this),
             blink(this)
         {}
 
+        //
+        //! @fn ~QueueHead()
+        //  @brief Default Destructor
+        //
         ~QueueHead() = default;
 
+        //
+        //! @fn QueueHead(const QueueHead &)
+        //  @brief Disable the ability to copy this class via another QueueHead.
+        //  @param QueueHead A reference to a QueueHead.
+        //
         QueueHead(const QueueHead&) = delete;
 
+        //
+        //! @fn QueueHead& operator=(QueueHead &)
+        //  @brief Disable the ability to copy this class via the equal operator.
+        //  @param QueueHead A reference to a QueueHead.
+        //  @retval QueueHead A reference to a QueueHead.
+        //
         QueueHead&
         operator=(const QueueHead&) = delete;
 
         bool
-        equal(const Node<T>* node)
+        operator==(const Node<T>* node)
         {
-            return (this == node);
+            return static_cast<void*>(this) == static_cast<const void*>(node);
+        }
+        bool
+
+        operator!=(const Node<T>* node)
+        {
+            return static_cast<void*>(this) != static_cast<const void*>(node);
         }
 
         void
@@ -211,6 +276,6 @@ class QueueHead : private Node<T>
         }
 
     private:
-        Node<T>* flink;
-        Node<T>* blink;
+        Node<T>* flink;             //!< Forward link to the first node in the queue (or the header).
+        Node<T>* blink;             //!< Backward link to the last node in the queue (or the header).
 };
